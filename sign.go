@@ -16,7 +16,7 @@ import (
 
 const (
 	SigHashForkID txscript.SigHashType = 0x40
-	sigHashBTG                         = 79
+	sigHashBTG                         = 79 << 8
 	sigHashMask                        = 0x1f
 )
 
@@ -163,7 +163,7 @@ func calcBip143SignatureHash(subScript []byte, sigHashes *txscript.TxSigHashes,
 	binary.LittleEndian.PutUint32(bLockTime[:], tx.LockTime)
 	sigHash.Write(bLockTime[:])
 	var bHashType [4]byte
-	binary.LittleEndian.PutUint32(bHashType[:], uint32(hashType|SigHashForkID|(sigHashBTG<<8)))
+	binary.LittleEndian.PutUint32(bHashType[:], uint32(hashType|SigHashForkID|sigHashBTG))
 	sigHash.Write(bHashType[:])
 
 	return chainhash.DoubleHashB(sigHash.Bytes())
