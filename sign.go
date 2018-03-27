@@ -246,7 +246,7 @@ func signMultiSig(tx *wire.MsgTx, idx int, subScript []byte, hashType txscript.S
 
 func SignatureScript(tx *wire.MsgTx, idx int, subscript []byte, hashType txscript.SigHashType,
 	privKey *btcec.PrivateKey, compress bool, amount int64) ([]byte, error) {
-	sig, err := RawTxInSignature(tx, idx, subscript, hashType, privKey, amt)
+	sig, err := RawTxInSignature(tx, idx, subscript, hashType, privKey, amount)
 	if err != nil {
 		return nil, err
 	}
