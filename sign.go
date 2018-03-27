@@ -3,19 +3,20 @@ package btgutil
 import (
 	"bytes"
 	"encoding/binary"
+	"errors"
 	"fmt"
+
 	"github.com/btcsuite/btcd/btcec"
+	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcutil"
-	"errors"
 )
 
 const (
 	SigHashForkID txscript.SigHashType = 0x40
-	sigHashBTG  = 79
+	sigHashBTG                         = 79
 	sigHashMask                        = 0x1f
 )
 
@@ -162,7 +163,7 @@ func calcBip143SignatureHash(subScript []byte, sigHashes *txscript.TxSigHashes,
 	binary.LittleEndian.PutUint32(bLockTime[:], tx.LockTime)
 	sigHash.Write(bLockTime[:])
 	var bHashType [4]byte
-	binary.LittleEndian.PutUint32(bHashType[:], uint32(hashType|SigHashForkID | (sigHashBTG << 8)))
+	binary.LittleEndian.PutUint32(bHashType[:], uint32(hashType|SigHashForkID|(sigHashBTG<<8)))
 	sigHash.Write(bHashType[:])
 
 	return chainhash.DoubleHashB(sigHash.Bytes())
